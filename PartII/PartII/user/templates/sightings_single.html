@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+        <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+       <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+       <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {% block js %}
+        <script src="{% static 'js/FileSaver.min.js' %}"></script>
+        <script src="{% static 'js/xlsx.core.min.js' %}"></script>
+
+        <script src="{% static 'js/bootstrap-table.js' %}"></script>
+        <script src="{% static 'js/bootstrap-table-zh-CN.js' %}"></script>
+
+        <script src="{% static 'js/tableExport.js' %}"></script>
+        <script src="{% static 'js/bootstrap-table-export.js' %}"></script>
+        <script src="{% static 'js/jquery-1.11.3.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet.js' %}"></script>
+        <script src="{% static 'leaflet/leaflet-src.js' %}"></script>
+    {% endblock %}
+    {% block css %}
+        <link href="{% static 'leaflet/leaflet.css' %}" rel="stylesheet"/>
+        <link href="{% static 'css/bootstrap-table.css' %}" rel="stylesheet"/>
+        <link href="{% static 'css/tableExport.css' %}" rel="stylesheet" />
+    {% endblock %}
+    <style>
+        #mapid {height:800px;}
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid" >
+        <table class="table table-bordered">
+          <caption>{{ id }}</caption>
+          <thead>
+            <tr>
+              <th>unique_squirrel_id</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+              <th>shift</th>
+              <th>date</th>
+              <th>age</th>
+              <th>Link_to_unique_squirrel_sighting</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ obj.unique_squirrel_id }}</td>
+              <td>{{obj.x}}</td>
+              <td>{{obj.y}}</td>
+                <td>{{obj.shift}}</td>
+                <td>{{obj.date}}</td>
+                <td>{{obj.age}}</td>
+                <td><a>"to_sighting/" + {{obj.unique_squirrel_id}}</a></td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    <div id="mapid"></div>
+    <script>
+        var osmUrl ='http://127.0.0.1:8000/static/Tiles/{z}/{x}/{y}.png',
+        osmAttrib = '&copy; <ahref="http://openstreetmap.org/copyright">OpenStreetMap</a>contributors',
+        osm =L.tileLayer(osmUrl, {
+            minZoom: 8,
+            maxZoom: 17,
+            attribution:osmAttrib
+        });
+
+        var map = L.map('mapid').setView([{{obj.y}}, {{obj.x}}], 16).addLayer(osm);
+
+        L.marker([{{obj.y}}, {{obj.x}}]).addTo(map).bindPopup("<b>{{ obj.unique_squirrel_id }}</b>, I'm here.<b></b>").openPopup();;
+    </script>
+</body>
+</html>

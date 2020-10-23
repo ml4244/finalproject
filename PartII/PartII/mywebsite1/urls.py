@@ -24,10 +24,11 @@ from django.conf import settings
 urlpatterns = [
     url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
 
-    url(r'^map', views.to_map),
-    url(r'sightings/stats', views.to_sightings_stats),
+    url(r'sightings/add', views.sightings_add),
     url(r'sightings/query_data', views.query_data),
-    url(r'^sightings', views.to_sightings),
+    url(r'sightings/(?P<id>[0-9a-zA-Z_-]{4,20})', views.to_sightings_single),
+    url(r'query_data/(?P<bid>[0-9a-zA-Z_-]{4,20})/$',views.query_single_sightings_data),
+    url(r'^sightings_all', views.to_sightings_all),
     url(r'^query_data', views.query_data),
     url(r'^query_all_points', views.query_all_points),
     url(r'^$', views.to_sightings),
