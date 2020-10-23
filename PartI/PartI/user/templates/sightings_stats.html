@@ -1,0 +1,470 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+        <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+       <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+       <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {% block js %}
+        <script src="{% static 'js/FileSaver.min.js' %}"></script>
+        <script src="{% static 'js/xlsx.core.min.js' %}"></script>
+
+        <script src="{% static 'js/bootstrap-table.js' %}"></script>
+        <script src="{% static 'js/bootstrap-table-zh-CN.js' %}"></script>
+
+        <script src="{% static 'js/tableExport.js' %}"></script>
+        <script src="{% static 'js/bootstrap-table-export.js' %}"></script>
+        <script src="{% static 'js/echarts-4.2.1.js' %}" type="text/javascript"></script>
+    {% endblock %}
+    {% block css %}
+        <link href="{% static 'css/bootstrap-table.css' %}" rel="stylesheet"/>
+        <link href="{% static 'css/tableExport.css' %}" rel="stylesheet" />
+    {% endblock %}
+</head>
+
+<body>
+    <div class="container-fluid" >
+
+        <div id="toolbar" class="btn-group">
+            <button id="btn_add" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add
+            </button>
+        </div>
+
+        <form method="post" action="/sightings/add">
+            <div class="modal fade" id="addInfo" role="dialog">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Add Item</h4>
+                      </div>
+                      <div id="addInfoModal" class="modal-body">
+                        <div class="form-horizontal">
+                          <div class="form-group">
+                            <label for="add_x" class="col-sm-2 control-label">Latitude:*</label>
+                            <div class="col-sm-10">
+                              <input class="form-control" name="x" id="add_x" type="text">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="add_y" class="col-sm-2 control-label">Longitude:*</label>
+                            <div class="col-sm-10">
+                              <input class="form-control" name="y" id="add_y" type="text">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="add_unique_squirrel_id" class="col-sm-2 control-label">unique_squirrel_id:*</label>
+                            <div class="col-sm-10">
+                              <input class="form-control" name="unique_squirrel_id" id="add_unique_squirrel_id" type="text">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="add_shift" class="col-sm-2 control-label">shift:*</label>
+                            <div class="col-sm-10">
+                              <input class="form-control" name="shift" id="add_shift" type="text">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="add_date" class="col-sm-2 control-label">date:*</label>
+                            <div class="col-sm-10">
+                              <input class="form-control" name="date" id="add_date" type="text">
+                            </div>
+                          </div>
+                        <div class="form-group">
+                            <label for="add_age" class="col-sm-2 control-label">age:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="age" id="add_age" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_primary_fur_color" class="col-sm-2 control-label">primary_fur_color:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="primary_fur_color" id="add_primary_fur_color" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_location" class="col-sm-2 control-label">location:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="location" id="add_location" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_specific_location" class="col-sm-2 control-label">specific_location:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="specific_location" id="add_specific_location" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_running" class="col-sm-2 control-label">running:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="running" id="add_running" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_chasing" class="col-sm-2 control-label">chasing:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="chasing" id="add_chasing" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_climbing" class="col-sm-2 control-label">climbing:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="climbing" id="add_climbing" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_eating" class="col-sm-2 control-label">eating:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="eating" id="add_eating" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_foraging" class="col-sm-2 control-label">foraging:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="foraging" id="add_foraging" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_other_activities" class="col-sm-2 control-label">other_activities:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="other_activities" id="add_other_activities" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_kuks" class="col-sm-2 control-label">kuks:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="kuks" id="add_kuks" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_quaas" class="col-sm-2 control-label">quaas:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="quaas" id="add_quaas" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_moans" class="col-sm-2 control-label">moans:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="moans" id="add_moans" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_tail_flags" class="col-sm-2 control-label">tail_flags:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="tail_flags" id="add_tail_flags" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_tail_twitches" class="col-sm-2 control-label">tail_twitches:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="tail_twitches" id="add_tail_twitches" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_approaches" class="col-sm-2 control-label">approaches:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="approaches" id="add_approaches" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_indifferent" class="col-sm-2 control-label">indifferent:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="indifferent" id="add_indifferent" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="add_runs_from" class="col-sm-2 control-label">runs_from:*</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="runs_from" id="add_runs_from" type="text">
+                            </div>
+                        </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <div class="center-block">
+                          <button id="cancelAdd" type="button" class="btn btn-default" data-dismiss="modal">cancel</button>
+                          <button id="addInfoBtn" type="submit" class="btn btn-success">save</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+        </form>
+
+        <div id="atable">
+            <table id="table" class="table table-hover table-bordered" data-toggle="table" data-url="" >
+            </table>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        $("#btn_add").click(function(){
+	      console.log('add');
+	      $("#addInfo").modal()
+    	});
+    </script>
+
+    <script type="text/javascript">
+      function initTable() {
+          $('#table').bootstrapTable('destroy');
+          $("#table").bootstrapTable({
+            ajax: function ajaxReqDate(result) {
+            //console.log(result);
+            $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    //contentType: "application/json;charset=utf-8",
+                    url: "query_data" ,
+                    data: "",
+                    //data: JSON.stringify($("#SearchParma")),
+                    success: function (msg) {
+                        console.log(msg);
+
+                        result.success({
+                          row: msg
+                        });
+                        $('#table').bootstrapTable('load', msg);
+                    },
+                    error : function(msg) {
+                        console.log(msg);
+                        alert("connect failed！");
+                    }
+                });
+
+            },
+            cache: true,
+            striped: true,
+            pagination: true,
+            pageList: [5, 7, 10, 25, 50],
+            pageSize: 10,
+            pageNumber: 1,
+            toolbar: '#toolbar',
+            search: true,
+            strictSearch: true,
+            showRefresh: true,
+            showExport: true,
+            exportDataType: "all",
+            showColumns: true,
+            showToggle: false,
+            cardView: false,
+            detailView: false,
+            searchOnEnterKey: true,
+            sidePagination: 'client',
+            uniqueId: "id",
+            columns: [
+              {
+                  checkbox: true,
+                  align: 'center'
+              },{
+                  sortable: true,
+                  field: 'pk',
+                  title: 'unique_squirrel_id',
+                  align: 'center',
+                  valign: 'middle',
+                  {#formatter: actionFormatter,#}
+              }, {
+                  sortable: true,
+                  field: 'fields.x',
+                  title: 'Latitude',
+                  align: 'center',
+                  valign: 'middle'
+              }, {
+                  sortable: true,
+                  field: 'fields.y',
+                  title: 'Longitude',
+                  align: 'center',
+                  valign: 'middle'
+              }, {
+                  sortable: true,
+                  field: 'fields.hectare',
+                  title: 'hectare',
+                  align: 'center',
+                  valign: 'middle'
+              }, {
+                  sortable: true,
+                  field: 'fields.shift',
+                  title: 'shift',
+                  align: 'center',
+                  valign: 'middle'
+              }, {
+                  sortable: true,
+                  field: 'fields.date',
+                  title: 'date',
+                  align: 'center',
+                  valign: 'middle'
+              }, {
+                  sortable: true,
+                  field: 'fields.hectare_squirrel_number',
+                  title: 'hectare_squirrel_number',
+                  align: 'center',
+                  valign: 'middle'
+              }, {
+                  sortable: true,
+                  field: 'fields.age',
+                  title: 'age',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.primary_fur_color',
+                  title: 'primary_fur_color',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.highlight_fur_color',
+                  title: 'highlight_fur_color',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.combination_of_primary_and_highlight',
+                  title: 'combination_of_primary_and_highlight',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.color_notes',
+                  title: 'color_notes',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.location',
+                  title: 'location',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.above_ground_sighter_measurement',
+                  title: 'above_ground_sighter_measurement',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.specific_location',
+                  title: 'specific_location',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.running',
+                  title: 'running',
+                  align: 'center',
+                  valign: 'middle',
+                  {#formatter: actionFormatter2,#}
+              },{
+                  sortable: true,
+                  field: 'fields.chasing',
+                  title: 'chasing',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.climbing',
+                  title: 'climbing',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.eating',
+                  title: 'eating',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.foraging',
+                  title: 'foraging',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.other_activities',
+                  title: 'other_activities',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.kuks',
+                  title: 'kuks',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.quaas',
+                  title: 'quaas',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.moans',
+                  title: 'moans',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.tail_flags',
+                  title: 'tail_flags',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.tail_twitches',
+                  title: 'tail_twitches',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.approaches',
+                  title: 'approaches',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.indifferent',
+                  title: 'indifferent',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.runs_from',
+                  title: 'runs_from',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.other_interactions',
+                  title: 'other_interactions',
+                  align: 'center',
+                  valign: 'middle'
+              },{
+                  sortable: true,
+                  field: 'fields.lat_long',
+                  title: 'lat_long',
+                  align: 'center',
+                  valign: 'middle'
+              }
+            ],
+            onLoadSuccess: function(){
+                console.info("load success");
+            },
+            onLoadError: function(){
+                console.info("load failed");
+            }
+          });
+    }
+
+
+    $(document).ready(function() {
+      initTable();
+
+      //$("#search").bind("click", queryData);
+
+    });
+
+    </script>
+</body>
+</html>
